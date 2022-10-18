@@ -185,12 +185,12 @@ impl Multibody {
 
     pub(crate) fn append(&mut self, mut rhs: Multibody, parent: usize, joint: MultibodyJoint) {
         let rhs_root_ndofs = rhs.links[0].joint.ndofs();
-        let rhs_copy_shift = self.ndofs + rhs_root_ndofs;
+        let rhs_copy_shift = self.ndofs + joint.ndofs();
         let rhs_copy_ndofs = rhs.ndofs - rhs_root_ndofs;
 
         // Adjust the ids of all the rhs links except the first one.
         let base_assembly_id = self.velocities.len() - rhs_root_ndofs + joint.ndofs();
-        let base_internal_id = self.links.len() + 1;
+        let base_internal_id = self.links.len();
         let base_parent_id = self.links.len();
 
         for link in &mut rhs.links.0[1..] {
